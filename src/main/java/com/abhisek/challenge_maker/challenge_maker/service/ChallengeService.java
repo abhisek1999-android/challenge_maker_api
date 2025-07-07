@@ -32,6 +32,7 @@ public class ChallengeService {
     @Autowired
     private UserRepository userRepository;
 
+
     @Autowired
     private ChallengeParticipantRepository challengeParticipantRepository;
 
