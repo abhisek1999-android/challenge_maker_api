@@ -99,6 +99,7 @@ public class ChallengeService {
        }
     }
 
+
 /**
 * The below function is not using sql query to fetch challenges and their participation status.
 */
