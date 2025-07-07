@@ -36,6 +36,9 @@ public class ChallengeParticipant {
     @CreationTimestamp
     private LocalDateTime joinedAt;
 
+    @Column(name = "challenge_completed_prof_video", columnDefinition = "TEXT")
+    private String challengeCompletedProfVideo;
+
     // Getters and Setters
 }
 

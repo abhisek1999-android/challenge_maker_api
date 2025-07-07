@@ -1,6 +1,7 @@
 package com.abhisek.challenge_maker.challenge_maker.security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -19,11 +20,29 @@ public class JwtService {
 
     // Replace this with a secure key in a real application, ideally fetched from environment variables
     public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+    private static final long accessTokenValidity = 1000 * 60 * 30; // 30 minutes
+    private static final long refreshTokenValidity = 1000 * 60 * 60 * 24 * 7; // 7 days
 
     // Generate token with given user name
     public String generateToken(String userName) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, userName);
+    }
+
+    public String generateRefreshToken(String userName) {
+        Map<String, Object> claims = new HashMap<>();
+        return createRefreshToken(claims, userName);
+    }
+
+    private String createRefreshToken(Map<String, Object> claims, String userName) {
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(userName)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenValidity))
+                .signWith(getSignKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     // Create a JWT token with specified claims and subject (user name)
@@ -32,7 +51,7 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(userName)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) // Token valid for 30 minutes
+                .setExpiration(new Date(System.currentTimeMillis() + accessTokenValidity))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -69,7 +88,7 @@ public class JwtService {
     }
 
     // Check if the token is expired
-    private Boolean isTokenExpired(String token) {
+    public Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
@@ -78,4 +97,7 @@ public class JwtService {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
+
+
+
 }

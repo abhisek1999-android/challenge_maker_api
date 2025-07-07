@@ -7,9 +7,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 @SpringBootApplication
 @EnableMethodSecurity
 public class ChallengeMakerApplication {
-
 	public static void main(String[] args) {
-		SpringApplication.run(ChallengeMakerApplication.class, args);
+		var context = SpringApplication.run(ChallengeMakerApplication.class, args);
 	}
 
 }

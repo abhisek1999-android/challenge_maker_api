@@ -13,11 +13,14 @@ public class UserInfoDetails implements UserDetails {
 
     private String username;
     private String password;
+
+    private int id;
     private List<GrantedAuthority> authorities;
 
     public UserInfoDetails(User userInfo) {
         this.username = userInfo.getUserName();
         this.password = userInfo.getPassword();
+        this.id = userInfo.getId();
         this.authorities = List.of(userInfo.getRoles().split(","))
                 .stream()
                 .map(SimpleGrantedAuthority::new) // Add "ROLE_" prefix
@@ -38,7 +41,9 @@ public class UserInfoDetails implements UserDetails {
     public String getUsername() {
         return username;
     }
-
+    public int getId() { // Getter for id
+        return id;
+    }
     @Override
     public boolean isAccountNonExpired() {
         return true;
